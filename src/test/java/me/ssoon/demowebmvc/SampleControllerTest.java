@@ -1,8 +1,6 @@
 package me.ssoon.demowebmvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -22,14 +20,8 @@ public class SampleControllerTest {
 
     @Test
     public void helloTest() throws Exception {
-        mockMvc.perform(get("/hello"))
+        mockMvc.perform(get("/hello/soohoon"))
             .andDo(print())
             .andExpect(status().isOk());
-        mockMvc.perform(put("/hello"))
-            .andDo(print())
-            .andExpect(status().isMethodNotAllowed());
-        mockMvc.perform(post("/hello"))
-            .andDo(print())
-            .andExpect(status().isMethodNotAllowed());
     }
 }
