@@ -4,6 +4,7 @@ public class Event {
 
     private Integer id;
     private String name;
+    private Integer limit;
 
     public Integer getId() {
         return id;
@@ -19,5 +20,13 @@ public class Event {
 
     public void setName(final String name) {
         this.name = name;
+    }
+
+    public Integer getLimit() {
+        return limit;
+    }
+
+    public void setLimit(final Integer limit) {
+        this.limit = limit;
     }
 }

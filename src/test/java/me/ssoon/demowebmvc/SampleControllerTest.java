@@ -1,6 +1,6 @@
 package me.ssoon.demowebmvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -21,9 +21,11 @@ public class SampleControllerTest {
 
     @Test
     public void deleteEvent() throws Exception {
-        mockMvc.perform(get("/events/1;name=soohoon"))
+        mockMvc.perform(post("/events")
+                .param("name", "soohoon")
+                .param("limit", "20"))
             .andDo(print())
             .andExpect(status().isOk())
-            .andExpect(jsonPath("id").value(1));
+            .andExpect(jsonPath("name").value("soohoon"));
     }
 }
