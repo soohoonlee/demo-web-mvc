@@ -1,10 +1,12 @@
 package me.ssoon.demowebmvc;
 
+import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -18,12 +20,15 @@ public class SampleController {
         return "/events/form";
     }
 
-    @PostMapping("/events")
+    @PostMapping("/events/name/{name}")
     @ResponseBody
-    public Event getEvent(final @RequestParam String name, final @RequestParam Integer limit) {
-        final Event event = new Event();
-        event.setName(name);
-        event.setLimit(limit);
+    public Event getEvent(final @Valid @ModelAttribute Event event, final BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            System.out.println("==================================");
+            bindingResult.getAllErrors().forEach(c -> {
+                System.out.println(c.toString());
+            });
+        }
         return event;
     }
 }
