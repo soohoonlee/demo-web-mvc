@@ -1,5 +1,7 @@
 package me.ssoon.demowebmvc;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -7,7 +9,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class SampleController {
@@ -20,13 +21,25 @@ public class SampleController {
         return "/events/form";
     }
 
-    @PostMapping("/events/name/{name}")
-    @ResponseBody
-    public Event getEvent(final @Validated(Event.ValidateName.class) @ModelAttribute Event event, final BindingResult bindingResult) {
+    @PostMapping("/events")
+    public String createEvent(final @Validated @ModelAttribute Event event,
+        final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            System.out.println("==================================");
-            bindingResult.getAllErrors().forEach(c -> System.out.println(c.toString()));
+            return "/events/form";
         }
-        return event;
+        return "redirect:/events/list";
+    }
+
+    @GetMapping("/events/list")
+    public String getEvents(final Model model) {
+        final Event event = new Event();
+        event.setName("spring");
+        event.setLimit(10);
+
+        final List<Event> eventList = new ArrayList<>();
+        eventList.add(event);
+
+        model.addAttribute("eventList", eventList);
+        return "/events/list";
     }
 }

@@ -8,12 +8,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.util.Map;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.web.servlet.ModelAndView;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest
@@ -32,10 +35,14 @@ public class SampleControllerTest {
 
     @Test
     public void postEvent() throws Exception {
-        mockMvc.perform(post("/events/name/soohoon")
-                .param("limit", "-10"))
+        final ResultActions result = mockMvc.perform(post("/events")
+            .param("name", "soohoon")
+            .param("limit", "-10"))
             .andDo(print())
             .andExpect(status().isOk())
-            .andExpect(jsonPath("name").value("soohoon"));
+            .andExpect(model().hasErrors());
+        final ModelAndView modelAndView = result.andReturn().getModelAndView();
+        final Map<String, Object> model = modelAndView.getModel();
+        System.out.println(model.size());
     }
 }
