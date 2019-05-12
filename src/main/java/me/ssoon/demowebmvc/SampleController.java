@@ -3,7 +3,6 @@ package me.ssoon.demowebmvc;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @SessionAttributes("event")
@@ -42,23 +42,28 @@ public class SampleController {
 
     @PostMapping("/events/form/limit")
     public String eventsFormLimitSubmit(final @Validated @ModelAttribute Event event,
-        final BindingResult bindingResult, final SessionStatus sessionStatus) {
+        final BindingResult bindingResult, final SessionStatus sessionStatus,
+        final RedirectAttributes attributes) {
         if (bindingResult.hasErrors()) {
             return "/events/form-limit";
         }
         sessionStatus.setComplete();
+        attributes.addAttribute("name", event.getName());
+        attributes.addAttribute("limit", event.getLimit());
         return "redirect:/events/list";
     }
 
     @GetMapping("/events/list")
-    public String getEvents(final Model model, final HttpSession httpSession) {
-        final LocalDateTime visitTime = (LocalDateTime) httpSession.getAttribute("visitTime");
+    public String getEvents(final @ModelAttribute("newEvent") Event event, final Model model,
+        final @SessionAttribute LocalDateTime visitTime) {
         System.out.println(visitTime);
-        final Event event = new Event();
+
+        final Event spring = new Event();
         event.setName("spring");
         event.setLimit(10);
 
         final List<Event> eventList = new ArrayList<>();
+        eventList.add(spring);
         eventList.add(event);
 
         model.addAttribute("eventList", eventList);
