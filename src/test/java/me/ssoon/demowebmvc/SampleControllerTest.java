@@ -9,7 +9,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,5 +49,19 @@ public class SampleControllerTest {
         final ModelAndView modelAndView = result.andReturn().getModelAndView();
         final Map<String, Object> model = modelAndView.getModel();
         System.out.println(model.size());
+    }
+
+    @Test
+    public void getEvents() throws Exception {
+        final Event newEvent = new Event();
+        newEvent.setName("Winter is coming.");
+        newEvent.setLimit(10000);
+
+        mockMvc.perform(get("/events/list")
+            .sessionAttr("visitTime", LocalDateTime.now())
+            .flashAttr("newEvent", newEvent))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(xpath("//p").nodeCount(2));
     }
 }
