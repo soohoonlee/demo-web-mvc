@@ -17,7 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @SessionAttributes("event")
-public class SampleController {
+public class EventController {
 
     @GetMapping("/events/form/name")
     public String eventsFormName(final Model model) {
