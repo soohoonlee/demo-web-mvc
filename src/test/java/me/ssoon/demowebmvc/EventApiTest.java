@@ -38,10 +38,9 @@ public class EventApiTest {
         mockMvc.perform(post("/api/events")
             .contentType(MediaType.APPLICATION_JSON_UTF8)
             .content(json)
+            .accept(MediaType.APPLICATION_JSON)
         )
             .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("name").value("soohoon"))
-            .andExpect(jsonPath("limit").value(-20));
+            .andExpect(status().isBadRequest());
     }
 }
