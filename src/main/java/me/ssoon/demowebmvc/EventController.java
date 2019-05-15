@@ -19,6 +19,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @SessionAttributes("event")
 public class EventController {
 
+    @ModelAttribute
+    public void categories(final Model model) {
+        model.addAttribute("categories", List.of("study", "seminar", "hobby", "social"));
+    }
+
     @GetMapping("/events/form/name")
     public String eventsFormName(final Model model) {
         model.addAttribute("event", new Event());
