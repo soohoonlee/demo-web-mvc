@@ -1,7 +1,10 @@
 package me.ssoon.demowebmvc;
 
+import java.time.LocalDate;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 public class Event {
 
@@ -10,6 +13,8 @@ public class Event {
     private String name;
     @Min(0)
     private Integer limit;
+    @DateTimeFormat(iso = ISO.DATE)
+    private LocalDate startDate;
 
     public Integer getId() {
         return id;
@@ -33,5 +38,13 @@ public class Event {
 
     public void setLimit(final Integer limit) {
         this.limit = limit;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(final LocalDate startDate) {
+        this.startDate = startDate;
     }
 }
