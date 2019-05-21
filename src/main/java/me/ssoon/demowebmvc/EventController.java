@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,6 +21,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @SessionAttributes("event")
 public class EventController {
+
+    @ExceptionHandler({EventException.class, RuntimeException.class})
+    public String eventErrorHandler(final RuntimeException exception, final Model model) {
+        model.addAttribute("message", "runtime error");
+        return "error";
+    }
 
     @InitBinder
     public void initEventBinder(final WebDataBinder webDataBinder) {
@@ -34,8 +41,9 @@ public class EventController {
 
     @GetMapping("/events/form/name")
     public String eventsFormName(final Model model) {
-        model.addAttribute("event", new Event());
-        return "/events/form-name";
+        throw new EventException();
+        // model.addAttribute("event", new Event());
+        // return "/events/form-name";
     }
 
     @PostMapping("/events/form/name")
